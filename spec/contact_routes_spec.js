@@ -13,14 +13,14 @@ describe('ContactRoutes', function () {
       var deferred = Q.defer(),
           promise = deferred.promise
 
-      deferred.resolve({id: 1, name: 'teste', phone: '9999999', carrier_id: 1})
+      deferred.resolve({contacts: [{id: 1, name: 'teste', phone: '9999999', carrier_id: 1}]})
       sinon.stub(Contact, 'index').returns(promise)
 
       chai.request('http://localhost:8000/api')
         .get('/contacts')
         .end(function (err, res) {
           expect(res.status).to.equal(200)
-          expect(res.body).to.deep.equal({id: 1, name: 'teste', phone: '9999999', carrier_id: 1})
+          expect(res.body).to.deep.equal({contacts: [{id: 1, name: 'teste', phone: '9999999', carrier_id: 1}]})
           done()
         })
     })
@@ -31,7 +31,7 @@ describe('ContactRoutes', function () {
       var deferred = Q.defer(),
           promise = deferred.promise
 
-      deferred.resolve({id: 1, name: 'teste', phone: '9999999', carrier_id: 1})
+      deferred.resolve({contact: {id: 1, name: 'teste', phone: '9999999', carrier_id: 1}})
       sinon.stub(Contact, 'create').returns(promise)
 
       chai.request('http://localhost:8000/api')
@@ -39,7 +39,7 @@ describe('ContactRoutes', function () {
         .send({contact: {name: 'teste', phone: '9999999', carrier_id: 1}})
         .end(function (err, res) {
           expect(res.status).to.equal(200)
-          expect(res.body).to.deep.equal({id: 1, name: 'teste', phone: '9999999', carrier_id: 1})
+          expect(res.body).to.deep.equal({contact: {id: 1, name: 'teste', phone: '9999999', carrier_id: 1}})
         })
     })
   })
@@ -49,14 +49,14 @@ describe('ContactRoutes', function () {
       var deferred = Q.defer(),
           promise = deferred.promise
 
-      deferred.resolve({id: 1, name: 'teste', phone: '9999999', carrier_id: 1})
+      deferred.resolve({contact: {id: 1, name: 'teste', phone: '9999999', carrier_id: 1}})
       sinon.stub(Contact, 'getOne').returns(promise)
 
       chai.request('http://localhost:8000/api')
         .get('/contacts/1')
         .end(function (err, res) {
           expect(res.status).to.equal(200)
-          expect(res.body).to.deep.equal({id: 1, name: 'teste', phone: '9999999', carrier_id: 1})
+          expect(res.body).to.deep.equal({contact: {id: 1, name: 'teste', phone: '9999999', carrier_id: 1}})
         })
     })
   })

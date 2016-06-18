@@ -39,9 +39,9 @@ router.route('/contacts')
       })
   })
 
-router.route('contacts/:id')
+router.route('/contacts/:contact_id')
   .get(function (req, res) {
-    Contact.getOne(req.params.id)
+    Contact.getOne(req.params.contact_id)
       .then(function (contact) {
         res.json(contact)
       })

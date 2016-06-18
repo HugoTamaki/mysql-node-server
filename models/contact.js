@@ -16,7 +16,7 @@ var Contact = {
       if (err) {
         deferred.reject(err)
       } else {
-        deferred.resolve(result[0])
+        deferred.resolve({contact: result})
       }
     })
 
@@ -29,9 +29,9 @@ var Contact = {
 
     connection.query(sql, function (err, result) {
       if (err) {
-
+        deferred.reject(err)
       } else {
-        deferred.resolve(result[0])
+        deferred.resolve({contacts: result})
       }
     })
 
@@ -46,7 +46,7 @@ var Contact = {
       if (err) {
         deferred.reject(err)
       } else {
-        deferred.resolve(result[0])
+        deferred.resolve({contact: result[0]})
       }
     })
 
