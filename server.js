@@ -32,7 +32,7 @@ router.route('/contacts')
     var contact = req.body.contact
     Contact.create(contact)
       .then(function (result) {
-        res.json('Contact created')
+        res.json(result)
       })
       .then(function (error) {
         res.json(error)
@@ -44,6 +44,19 @@ router.route('/contacts/:contact_id')
     Contact.getOne(req.params.contact_id)
       .then(function (contact) {
         res.json(contact)
+      })
+      .catch(function (error) {
+        res.json(error)
+      })
+  })
+
+  .put(function (req, res) {
+    var contact = req.body.contact,
+        contact_id = req.params.contact_id
+
+    Contact.update(contact_id, contact)
+      .then(function (result) {
+        res.json(result)
       })
       .catch(function (error) {
         res.json(error)

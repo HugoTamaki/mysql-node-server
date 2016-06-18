@@ -60,4 +60,21 @@ describe('ContactRoutes', function () {
         })
     })
   })
+
+  describe('#put contacts/:id', function () {
+    it('should update one contact by id', function () {
+      var deferred = Q.defer(),
+          promise = deferred.promise
+
+      deferred.resolve({contact: {name: 'teste', phone: '9999999', carrier_id: 1}})
+      sinon.stub(Contact, 'update').returns(promise)
+
+      chai.request('http://localhost:8000/api')
+        .put('/contacts/1')
+        .end(function (err, res) {
+          expect(res.status).to.equal(200)
+          expect(res.body).to.deep.equal({contact: {id: 1, name: 'teste', phone: '9999999', carrier_id: 1}})
+        })
+    })
+  })
 })
