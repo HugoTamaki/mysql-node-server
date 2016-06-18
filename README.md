@@ -2,6 +2,8 @@
 
 ## To run at development environment
 
+run `npm install`
+
 Create a database called `nodeserver`
 
 Create a contacts table
@@ -17,3 +19,11 @@ CREATE TABLE carriers (id INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255))
 ```
 
 Run `node server.js` and it will listen to port 8000.
+
+## Tests
+
+Install mocha globally
+
+`npm install mocha -g`
+
+run mocha spec/
