@@ -29,7 +29,7 @@ router.route('/contacts')
   })
 
   .post(function (req, res) {
-    var contact = JSON.parse(req.body.contact)
+    var contact = req.body.contact
     Contact.create(contact)
       .then(function (result) {
         res.json('Contact created')
@@ -53,4 +53,4 @@ router.route('contacts/:id')
 app.use('/api', router);
 
 app.listen(port);
-console.log('Magic happens on port ' + port);
+console.log('Magic happens on port ' + port)
