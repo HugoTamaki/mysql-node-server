@@ -5,18 +5,27 @@ var Q = require('q')
 
 var Contact = {
   create: function (options) {
-    var sql = 'INSERT INTO contacts (name, phone, carrier_id) VALUES (',
-        deferred = Q.defer()
+    var sql = 'INSERT INTO contacts (name, phone, carrier_id) VALUES (?, ?, ?)',
+        deferred = Q.defer(),
+        values = [
+          options.name,
+          options.phone,
+          options.carrier_id,
+        ]
 
-    sql += connection.escape(options.name) + ','
-    sql += connection.escape(options.phone) + ','
-    sql += connection.escape(options.carrier_id) + ')'
-
-    connection.query(sql, function (err, result) {
+    connection.query(sql, values, function (err, result) {
       if (err) {
         deferred.reject(err)
       } else {
-        deferred.resolve({contact: result})
+        deferred.resolve(
+          {
+            contact: {
+              id: result.insertId,
+              name: options.name,
+              phone: options.phone,
+              carrier_id: options.carrier_id
+            }
+          })
       }
     })
 
@@ -39,10 +48,11 @@ var Contact = {
   },
 
   getOne: function (id) {
-    var sql = 'SELECT * FROM contacts WHERE id = ' + connection.escape(id),
-        deferred = Q.defer()
+    var sql = 'SELECT * FROM contacts WHERE id = ?',
+        deferred = Q.defer(),
+        values = [id]
 
-    connection.query(sql, function (err, result) {
+    connection.query(sql, values, function (err, result) {
       if (err) {
         deferred.reject(err)
       } else {
@@ -56,20 +66,19 @@ var Contact = {
   update: function (id, options) {
     var sql = 'UPDATE contacts SET ',
         deferred = Q.defer(),
-        values = []
+        queryParams = [],
+        values
 
     if (options.name || options.phone || options.carrier_id) {
-      options.name ? values.push('name = ' + connection.escape(options.name)) : null
-      options.phone ? values.push('phone = ' + connection.escape(options.phone)) : null
-      options.carrier_id ? values.push('carrier_id = ' + connection.escape(options.carrier_id)) : null
+      sql = prepareQuery(sql, id, options)
+      values = prepareValues(options, id)
 
-      sql = sql + values.join(',') + ' WHERE id = ' + connection.escape(id)
-
-      connection.query(sql, function (err, result) {
+      connection.query(sql, values, function (err, result) {
         if (err) {
           deferred.reject(err)
         } else {
-          deferred.resolve({contact: result[0]})
+          options.id = id
+          deferred.resolve({contact: options})
         }
       })
     } else {
@@ -78,6 +87,42 @@ var Contact = {
 
     return deferred.promise
   }
+}
+
+function prepareQuery (query, id, options) {
+  var queryParams = []
+
+  if (options.name) {
+    queryParams.push('name = ?')
+  }
+  if (options.phone) {
+    queryParams.push('phone = ?')
+  }
+  if (options.carrier_id) {
+    queryParams.push('carrier_id = ?')
+  }
+
+  query += queryParams.join(',') + ' WHERE id = ?'
+
+  return query
+}
+
+function prepareValues (options, id) {
+  var values = []
+
+  if (options.name) {
+    values.push(options.name)
+  }
+  if (options.phone) {
+    values.push(options.phone)
+  }
+  if (options.carrier_id) {
+    values.push(options.carrier_id)
+  }
+
+  values.push(id)
+
+  return values
 }
 
 module.exports = Contact
