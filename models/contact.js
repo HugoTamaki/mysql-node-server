@@ -77,7 +77,7 @@ var Contact = {
         if (err) {
           deferred.reject(err)
         } else {
-          options.id = id
+          options.id = parseInt(id)
           deferred.resolve({contact: options})
         }
       })

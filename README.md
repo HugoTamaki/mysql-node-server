@@ -26,4 +26,8 @@ Install mocha globally
 
 `npm install mocha -g`
 
+create an exactly equal database, but for a database called nodeserver_test
+
+at config.js, change the database name for the newly created database
+
 run mocha spec/
